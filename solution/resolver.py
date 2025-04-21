@@ -1,5 +1,4 @@
 import math
-from traceback import print_tb
 
 
 def _gauss(a):
@@ -48,8 +47,8 @@ def calculate_least_squares_metrics(x_values, y_values, phi_array):
     residuals = [phi - y for phi, y in zip(phi_array, y_values)]
     mse = sum(e ** 2 for e in residuals) / len(x_values)
     rmse = math.sqrt(mse)
-    y_mean = sum(y_values) / len(y_values)
-    ss_tot = sum((y - y_mean) ** 2 for y in y_values)
+    phi_mean = sum(phi_array) / len(phi_array)
+    ss_tot = sum((y - phi_mean) ** 2 for y in y_values)
     ss_res = sum(e ** 2 for e in residuals)
     r_squared = 1 - (ss_res / ss_tot if ss_tot != 0 else 0)
     return residuals, mse, rmse, r_squared
@@ -96,8 +95,8 @@ def calculate_linear(x, y):
     n = len(x)
     sx, sy, sxx, sxy, *_ = make_sums(x, y)
     det = n * sxx - sx * sx
-    # if det == 0:
-    #     return None
+    if det == 0:
+        return None
     a = (sy * sxx - sx * sxy) / det
     b = (n * sxy - sx * sy) / det
     phi = [a + b * xi for xi in x]
