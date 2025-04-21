@@ -1,3 +1,4 @@
+import sys
 import threading
 import os
 import numpy as np
@@ -6,6 +7,7 @@ import matplotlib.pyplot as plt
 import solution.resolver as solver
 from file_manager import file_reader
 from gui_manager.gui_manager import start
+from gui_manager.gui_manager import plot_function
 
 
 def read_xy_console():
@@ -33,7 +35,7 @@ def read_xy_console():
     return x_vals, y_vals
 
 
-def process_output(results):
+def process_output(x_vals, y_vals, results):
     best_method = None
     best_rmse = float('inf')
 
@@ -70,7 +72,9 @@ def process_output(results):
                 "\nВыберите способ вывода (1 - консоль, 2 - файл): ",
                 lambda v: v if v in ("1", "2") else ValueError())
             if out_m == "1":
+                plot_function(x_vals, y_vals, results)
                 print("\nРезультат:\n", output)
+
             else:
                 while True:
                     fname = input("Имя файла: ").strip()
@@ -84,6 +88,11 @@ def process_output(results):
                         break
                     except Exception as e:
                         print(f"Ошибка записи: {e}")
+
+            ask_for_leave = input("Хотите выйти из приложения? Напишите exit:")
+
+            if ask_for_leave == "exit":
+                os._exit(0)
             break
         except Exception as e:
             print(f"Ошибка: {e}")
@@ -106,8 +115,9 @@ def console_input():
                               lambda x: x if x in ("solve", "exit") else ValueError())
         if cmd == "exit":
             print("Выход…")
-            return
+            os._exit(0)
         process_console_solution()
+        main()
 
 def process_console_solution():
     while True:
@@ -117,7 +127,10 @@ def process_console_solution():
             results = solver.calculate_interpolations(x_values, y_values)
 
 
-            process_output(results)
+            process_output(x_values, y_values ,results)
+
+
+
             break
 
         except Exception as e:
@@ -135,14 +148,16 @@ def main():
                 try:
                     x_vals, y_vals = file_reader.read_input_from_file()
                     result = solver.calculate_interpolations(x_vals, y_vals)
-                    process_output(result)
+                    process_output(x_vals, y_vals, result)
                     break
                 except Exception as e:
                     print(f"Ошибка файла: {e}")
         else:
-            threading.Thread(target=console_input, daemon=True).start()
-            start()
+            console_input()
+
 
 
 if __name__ == "__main__":
-    main()
+    threading.Thread(target=main, daemon=True).start()
+    start()
+    print("meow")
