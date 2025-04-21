@@ -53,7 +53,6 @@ def read_input_from_file():
             print(f"Ошибка: нужно от 8 до 11 точек, в файле {n}.")
             continue
 
-        # длины x_vals и y_vals одинаковы по коду, но проверим на всякий:
         if len(x_vals) != len(y_vals):
             print("Ошибка: количество X не совпадает с количеством Y.")
             continue

@@ -117,9 +117,6 @@ def process_console_solution():
             results = solver.calculate_interpolations(x_values, y_values)
 
 
-
-
-
             process_output(results)
             break
 

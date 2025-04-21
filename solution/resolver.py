@@ -1,11 +1,12 @@
 import math
+from traceback import print_tb
+
 
 def _gauss(a):
     n = len(a)
     for k in range(n):
         i = max(range(k, n), key=lambda r: abs(a[r][k]))
-        if abs(a[i][k]) < 1e-12:
-            return None
+
         a[k], a[i] = a[i], a[k]
         piv = a[k][k]
         for j in range(k, n + 1):
@@ -65,25 +66,28 @@ def pearson_correlation(x_values, y_values):
 
 
 def interpret_r_squared(r2):
-    if r2 >= 0.9:
-        return "Сильная зависимость"
-    if r2 >= 0.7:
-        return "Умеренная зависимость"
-    if r2 >= 0.5:
-        return "Слабая зависимость"
-    return "Зависимость практически отсутствует"
+    if r2 >= 0.95:
+        return "Высокая точность аппроксимации"
+    if 0.95 >r2 >= 0.75:
+        return "Удовлетворительная точность аппроксимации"
+    if 0.75 > r2 >= 0.5:
+        return "Слабая точность аппроксимации"
+    return "Точность слишком мала, модель нужно поменять"
 
 
 def interpret_pearson(r):
     r = abs(r)
-    if r >= 0.9:
-        return "Очень сильная корреляция"
-    if r >= 0.7:
-        return "Сильная корреляция"
-    if r >= 0.5:
-        return "Средняя корреляция"
+
+    if 0.9 < r < 1:
+        return "Связь весьма высокая"
+    if 0.7<r<=0.9:
+        return "Связь высокая"
+    if 0.5<r<=0.7:
+        return "Связь заметная"
+    if 0.3 < r <= 0.5:
+        return "Умеренная связь"
     if r >= 0.3:
-        return "Слабая корреляция"
+        return "Слабая связь"
     return "Почти отсутствует корреляция"
 
 
@@ -92,8 +96,8 @@ def calculate_linear(x, y):
     n = len(x)
     sx, sy, sxx, sxy, *_ = make_sums(x, y)
     det = n * sxx - sx * sx
-    if det == 0:
-        return None
+    # if det == 0:
+    #     return None
     a = (sy * sxx - sx * sxy) / det
     b = (n * sxy - sx * sy) / det
     phi = [a + b * xi for xi in x]
@@ -172,6 +176,7 @@ def calculate_power(x, y):
 
 
 def calculate_interpolations(x_values, y_values):
+
     methods = {
         "Линейная":         calculate_linear,
         "Квадратичная":     calculate_second,
