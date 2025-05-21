@@ -171,13 +171,28 @@ entries_y = []
 for i in range(1, 12):
     tk.Label(input_frame, text=f"{i}").grid(row=i, column=0, padx=5, pady=2)
 
-    entry_x = tk.Entry(input_frame, width=10)
+    entry_x = tk.Entry(input_frame, width=2)
     entry_x.grid(row=i, column=1, padx=5, pady=2)
     entries_x.append(entry_x)
 
-    entry_y = tk.Entry(input_frame, width=10)
+    entry_y = tk.Entry(input_frame, width=2)
     entry_y.grid(row=i, column=2, padx=5, pady=2)
     entries_y.append(entry_y)
+
+
+for i in range(12, 24):
+    tk.Label(input_frame, text=f"{i}").grid(row=i, column=0, padx=5, pady=2)
+
+    entry_x = tk.Entry(input_frame, width=2)
+    entry_x.grid(row=i, column=3, padx=5, pady=2)
+    entries_x.append(entry_x)
+
+    entry_y = tk.Entry(input_frame, width=2)
+    entry_y.grid(row=i, column=4, padx=5, pady=2)
+    entries_y.append(entry_y)
+
+
+
 
 frame_plot = tk.Frame(root)
 frame_plot.pack(pady=10)
@@ -191,5 +206,4 @@ result_text.pack()
 
 def start():
     root.mainloop()
-
 
